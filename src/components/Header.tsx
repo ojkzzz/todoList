@@ -15,17 +15,23 @@ import AlertCustom from "./Alert/Alert";
 const Header = () => {
   const [text, setText] = useState("");
   const listTodo = useAppSelector((state) => state.todoReducer.list);
+  const currentTodo = listTodo.filter(
+    (todo) => todo.isDeleted === false && todo.isDone === false
+  );
   const dispatch = useAppDispatch();
 
+  const hasDoubles = listTodo.some((el) => el.text === text.trim());
+  console.log(hasDoubles);
+
   const handleAddTodo = () => {
-    if (listTodo.length === 10) {
+    if (currentTodo.length === 10) {
       dispatch(makeAlertVisible());
       setTimeout(() => {
         dispatch(makeAlertHidden());
       }, 3000);
       return;
     }
-    if (text !== "") {
+    if (text !== "" && !hasDoubles) {
       dispatch(addTodo(text));
       setText("");
     }
