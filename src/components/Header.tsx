@@ -53,7 +53,7 @@ const Header = () => {
   return (
     <form className={classes.form} onSubmit={submitDeal}>
       <Stack
-        width={{ xs: "300px", sm: "500px", md: "600px", lg: "800px" }}
+        width={{ xs: "85%", sm: "500px", md: "600px", lg: "800px" }}
         mt={5}
         direction="row"
         justifyContent="center"
@@ -76,18 +76,18 @@ const Header = () => {
             direction={{ xs: "column", sm: "row" }}
             justifyContent="space-between"
             alignItems="center"
-            gap="10px"
+            gap={"10px"}
           >
             <Button
               variant="contained"
               startIcon={<AddIcon />}
               onClick={handleAddTodo}
               sx={{
-                width: window.innerWidth < 601 ? "204px" : "auto",
+                // width: window.innerWidth < 601 ? "204px" : "auto",
                 backgroundColor: "rgb(10%, 46%, 82%, 0.6)",
               }}
             >
-              Добавить дело
+              {window.innerWidth <= 600 ? "Добавить дело" : "Добавить"}
             </Button>
             <TextField
               id="todoField"
@@ -112,7 +112,7 @@ const Header = () => {
               onClick={handleResetTodo}
               sx={{ backgroundColor: "rgb(83%, 18%, 18%, 0.6);" }}
             >
-              Сбросить список
+              {window.innerWidth <= 600 ? "Очистить списки" : "Очистить"}
             </Button>
           </Stack>
         </Paper>

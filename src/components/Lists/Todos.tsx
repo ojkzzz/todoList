@@ -42,7 +42,7 @@ export const Todos = () => {
       <Stack
         alignItems="center"
         mt={5}
-        width={{ xs: "300px", sm: "500px", md: "600px", lg: "800px" }}
+        width={{ xs: "95%", sm: "500px", md: "600px", lg: "800px" }}
       >
         <Paper
           sx={{
@@ -68,9 +68,7 @@ export const Todos = () => {
               sx={{
                 padding: "20px 0 40px 0",
                 width: {
-                  xs: "250px",
-                  sm: "500px",
-                  md: "600px",
+                  xs: "100%",
                   lg: "auto",
                 },
               }}
