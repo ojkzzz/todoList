@@ -19,9 +19,7 @@ const CompletedTodos = () => {
               justifyContent="space-between"
               alignItems="center"
               width={{
-                xs: "200px",
-                sm: "400px",
-                md: "500px",
+                xs: "100%",
                 lg: "600px",
               }}
               border="1px solid rgba(235, 217, 217, 1)"
