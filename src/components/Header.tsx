@@ -21,7 +21,6 @@ const Header = () => {
   const dispatch = useAppDispatch();
 
   const hasDoubles = listTodo.some((el) => el.text === text.trim());
-  console.log(hasDoubles);
 
   const handleAddTodo = () => {
     if (currentTodo.length === 10) {
