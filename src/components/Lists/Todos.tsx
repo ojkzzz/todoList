@@ -7,13 +7,6 @@ import CurrentTodos from "./CurrentTodos";
 import DeletedTodo from "./DeletedTodo";
 import classes from "./styles.module.scss";
 
-const tabStylesBelow600px = {
-  backgroundColor: "rgba(0,0,255, 0.05)",
-  borderBottomColor: "black",
-  borderTopLeftRadius: "10px",
-  borderBottomLeftRadius: "10px",
-};
-
 export const Todos = () => {
   const listTodo = useAppSelector((state) => state.todoReducer.list);
   const completedTodo = listTodo.filter((todo) => todo.isDone === true);
@@ -74,8 +67,15 @@ export const Todos = () => {
               onChange={handleChange}
               sx={{
                 padding: "20px 0 40px 0",
+                width: {
+                  xs: "250px",
+                  sm: "500px",
+                  md: "600px",
+                  lg: "auto",
+                },
               }}
-              orientation={window.innerWidth <= 600 ? "vertical" : "horizontal"}
+              variant="scrollable"
+              allowScrollButtonsMobile={true}
               textColor="inherit"
               className={classes.tabs}
             >
@@ -87,22 +87,12 @@ export const Todos = () => {
                 }
                 value="current"
                 disabled={currentTodo.length > 0 ? false : true}
-                sx={
-                  window.innerWidth <= 600 && filterValue === "current"
-                    ? tabStylesBelow600px
-                    : null
-                }
               />
               <Tab
                 label={
                   listTodo.length ? `Все дела (${listTodo.length})` : "Все дела"
                 }
                 value="all"
-                sx={
-                  window.innerWidth <= 600 && filterValue === "all"
-                    ? tabStylesBelow600px
-                    : null
-                }
               />
               <Tab
                 label={
@@ -112,11 +102,6 @@ export const Todos = () => {
                 }
                 value="completed"
                 disabled={completedTodo.length > 0 ? false : true}
-                sx={
-                  window.innerWidth <= 600 && filterValue === "completed"
-                    ? tabStylesBelow600px
-                    : null
-                }
               />
               <Tab
                 label={
@@ -126,11 +111,6 @@ export const Todos = () => {
                 }
                 value="trash"
                 disabled={deletedTodos.length > 0 ? false : true}
-                sx={
-                  window.innerWidth <= 600 && filterValue === "trash"
-                    ? tabStylesBelow600px
-                    : null
-                }
               />
             </Tabs>
           ) : null}
