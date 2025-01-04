@@ -1,5 +1,5 @@
 {
-  "name": "todo-redux-ts",
+  "name": "todo_list",
   "version": "0.1.0",
   "private": true,
   "homepage": "https://ojkzzz.github.io/todoList",
@@ -21,6 +21,7 @@
     "react-redux": "^8.0.5",
     "react-router-dom": "^7.1.1",
     "react-scripts": "5.0.1",
+    "react-toastify": "^11.0.2",
     "sass": "^1.56.1",
     "typescript": "^4.8.4",
     "web-vitals": "^2.1.4"

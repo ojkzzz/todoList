@@ -5,7 +5,17 @@ import DoneIcon from "@mui/icons-material/Done";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import classes from "./styles/styles.module.scss";
 
-const TodoItem: FC<Todo> = ({ id, title, done }) => {
+interface Props extends Todo {
+  handleChangeStatus: () => void;
+  handleDelete: () => void;
+}
+
+const TodoItem: FC<Props> = ({
+  title,
+  done,
+  handleChangeStatus,
+  handleDelete,
+}) => {
   return (
     <Stack
       direction="row"
@@ -32,26 +42,12 @@ const TodoItem: FC<Todo> = ({ id, title, done }) => {
       </Typography>
       <Stack direction="row">
         <Tooltip title="Задача выполнена" placement="top">
-          <IconButton
-          // onClick={() => {
-          //   dispatch(
-          //     doneTodo(
-          //       data.data.findIndex(
-          //         (todo) => todo.title === el.title
-          //       )
-          //     )
-          //   );
-          // }}
-          >
+          <IconButton onClick={handleChangeStatus}>
             <DoneIcon />
           </IconButton>
         </Tooltip>
         <Tooltip title="Удалить задачу" placement="right-start">
-          <IconButton
-          // onClick={() => {
-          //   dispatch(deleteTodo(el.text));
-          // }}
-          >
+          <IconButton onClick={handleDelete}>
             <RemoveCircleIcon />
           </IconButton>
         </Tooltip>

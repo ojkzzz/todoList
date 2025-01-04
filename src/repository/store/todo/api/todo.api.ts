@@ -4,14 +4,38 @@ import { BASE_API_URL } from "../../../../libs/constants/http";
 import { SuccessResponse } from "../../../../libs/types/successResponse";
 import { Todo } from "../../../../models/todo";
 
+const API_URL = `${BASE_API_URL}/tasks`;
+
 export const todoApi = createApi({
   reducerPath: "todoApi",
   baseQuery: baseQueryWithReauth,
+  tagTypes: ["todoList"],
   endpoints: (builder) => ({
     getAllTodos: builder.query<SuccessResponse<Todo[]>, void>({
-      query: () => `${BASE_API_URL}/tasks`,
+      query: () => API_URL,
+      providesTags: ["todoList"],
+    }),
+    changeStatusTodo: builder.mutation<any, Todo>({
+      query: (body) => ({
+        url: API_URL,
+        method: "PATCH",
+        body,
+      }),
+      invalidatesTags: ["todoList"],
+    }),
+    deleteTodo: builder.mutation<any, { id: number }>({
+      query: (body) => ({
+        url: API_URL,
+        method: "DELETE",
+        body,
+      }),
+      invalidatesTags: ["todoList"],
     }),
   }),
 });
 
-export const { useLazyGetAllTodosQuery } = todoApi;
+export const {
+  useLazyGetAllTodosQuery,
+  useChangeStatusTodoMutation,
+  useDeleteTodoMutation,
+} = todoApi;

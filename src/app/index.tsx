@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from "react-router";
 import { ROUTER } from "./config/router";
 import { useAppSelector } from "../libs/hooks";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const { auth } = useAppSelector((state) => state.authReducer);
@@ -31,6 +32,7 @@ function App() {
           <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
       )}
+      <ToastContainer position="bottom-right" />
     </div>
   );
 }

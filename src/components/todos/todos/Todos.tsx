@@ -7,11 +7,16 @@ import {
   Tabs,
 } from "@mui/material";
 import { memo, useEffect, useMemo, useState } from "react";
-import AllTodos from "./AllTodos";
-import CompletedTodos from "./CompletedTodos";
-import CurrentTodos from "./CurrentTodos";
+
 import classes from "./styles/styles.module.scss";
-import { useLazyGetAllTodosQuery } from "../../../repository/store/todo/api/todo.api";
+import {
+  useChangeStatusTodoMutation,
+  useDeleteTodoMutation,
+  useLazyGetAllTodosQuery,
+} from "../../../repository/store/todo/api/todo.api";
+import TodoItem from "./TodoItem";
+import { Todo } from "../../../models/todo";
+import { toast } from "react-toastify";
 
 const Todos = () => {
   const [trigger, { data, isLoading, error }] = useLazyGetAllTodosQuery();
@@ -22,21 +27,20 @@ const Todos = () => {
       .catch((_err) => {});
   }, []);
 
+  const [todos, setTodos] = useState<Todo[]>([]);
+
   const allTodos = useMemo(() => (data ? data.data : []), [data]);
   const completedTodos = useMemo(
     () => (data ? data.data.filter((todo) => todo.done === true) : []),
     [data]
   );
   const currentTodos = useMemo(
-    () =>
-      data
-        ? data.data.filter((todo) => todo.done === false && todo.done === false)
-        : [],
+    () => (data ? data.data.filter((todo) => todo.done === false) : []),
     [data]
   );
 
-  const [filterValue, setFilterValue] = useState("current");
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+  const [filterValue, setFilterValue] = useState("all");
+  const handleChange = (_event: React.SyntheticEvent, newValue: string) => {
     setFilterValue(newValue);
   };
 
@@ -46,9 +50,62 @@ const Todos = () => {
     } else if (currentTodos.length === 0 && filterValue === "current") {
       setFilterValue("all");
     }
+    if (data) {
+      setTodos(data.data);
+      setFilterValue("all");
+    }
   }, [data]);
 
-  if (isLoading) return <CircularProgress />;
+  useEffect(() => {
+    if (filterValue === "all") {
+      setTodos(allTodos);
+    } else if (filterValue === "current") {
+      setTodos(currentTodos);
+    } else if (filterValue === "completed") {
+      setTodos(completedTodos);
+    }
+  }, [filterValue]);
+
+  const [changeStatus, { isLoading: _isLoadingChangingStatus }] =
+    useChangeStatusTodoMutation();
+
+  const [deleteTodo, { isLoading: _isLoadingDeletingTodo }] =
+    useDeleteTodoMutation();
+
+  const handleDelete = (todo: Todo) => {
+    deleteTodo({ id: todo.id })
+      .unwrap()
+      .then((_res) => {
+        toast.success("Задача успешно удалена!");
+      })
+      .catch((err) => {
+        toast.error(err.data.message || "Что-то пошло не так...");
+      });
+  };
+
+  const handleChangeStatus = (todo: Todo) => {
+    changeStatus({ ...todo, done: !todo.done })
+      .unwrap()
+      .then((_res) => {
+        toast.success("Статус успещно изменен!");
+      })
+      .catch((err) => {
+        toast.error(err.data.message || "Что-то пошло не так...");
+      });
+  };
+
+  if (isLoading)
+    return (
+      <Stack
+        sx={{
+          justifyContent: "center",
+          alignItems: "center",
+          mt: "40px",
+        }}
+      >
+        <CircularProgress />
+      </Stack>
+    );
   if (data)
     return (
       <Stack alignItems="center" pb={5}>
@@ -74,7 +131,7 @@ const Todos = () => {
             }}
             elevation={3}
           >
-            {data?.data.length ? (
+            {todos.length ? (
               <Tabs
                 value={filterValue}
                 onChange={handleChange}
@@ -101,9 +158,7 @@ const Todos = () => {
                 />
                 <Tab
                   label={
-                    data.data.length
-                      ? `Все дела (${data.data.length})`
-                      : "Все дела"
+                    todos.length ? `Все дела (${todos.length})` : "Все дела"
                   }
                   value="all"
                 />
@@ -118,11 +173,14 @@ const Todos = () => {
                 />
               </Tabs>
             ) : null}
-            {filterValue === "current" && <CurrentTodos todos={currentTodos} />}
-            {filterValue === "all" && <AllTodos todos={allTodos} />}
-            {filterValue === "completed" && (
-              <CompletedTodos todos={completedTodos} />
-            )}
+            {todos.map((todo) => (
+              <TodoItem
+                key={todo.id}
+                {...todo}
+                handleDelete={() => handleDelete(todo)}
+                handleChangeStatus={() => handleChangeStatus(todo)}
+              />
+            ))}
           </Paper>
         </Stack>
       </Stack>

@@ -4,6 +4,7 @@ import { useLoginMutation } from "../../repository/store/auth/api/auth.api";
 import { JWT_TOKENS_KEYS } from "../../libs/constants/tokens";
 import { useAppDispatch } from "../../libs/hooks";
 import { login } from "../../repository/store/auth/slice/auth.slice";
+import { toast } from "react-toastify";
 
 const LoginPage = () => {
   const [error, setError] = useState<boolean>(false);
@@ -35,6 +36,11 @@ const LoginPage = () => {
       })
       .catch((err) => {
         console.error(err);
+        toast.error(
+          err.status === "FETCH_ERROR"
+            ? "Отсутствует подключение к сервису бэкенда"
+            : err.data.error
+        );
       });
   };
   return (
