@@ -24,7 +24,10 @@ const Todos = () => {
     trigger()
       .unwrap()
       .then((_res) => {})
-      .catch((_err) => {});
+      .catch((err) => {
+        console.log(err.data);
+        console.log(err.data.error);
+      });
   }, []);
 
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -187,15 +190,9 @@ const Todos = () => {
     );
   if (error)
     return (
-      <Alert
-        //@ts-ignore
-        title={
-          //@ts-ignore
-          "data" in error && "error" in error.data
-            ? error.data
-            : "Что-то пошло не так"
-        }
-      />
+      <Alert severity="error">
+        {(error as any).data.error ?? "Что-то пошло не так"}
+      </Alert>
     );
   return null;
 };

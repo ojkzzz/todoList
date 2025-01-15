@@ -1,7 +1,7 @@
 import { fetchBaseQuery } from "@reduxjs/toolkit/query";
-import { JWT_TOKENS_KEYS } from "../../../../libs/constants/tokens";
-import { BASE_API_URL } from "../../../../libs/constants/http";
-import { login, logout } from "../../auth/slice/auth.slice";
+import { JWT_TOKENS_KEYS } from "libs/constants/tokens";
+import { BASE_API_URL } from "libs/constants/http";
+import { login, logout } from "repository/store/auth/slice/auth.slice";
 
 const prepareHeaders = (headers: any) => {
   const access_token = sessionStorage.getItem(JWT_TOKENS_KEYS.ACCESS_TOKEN);

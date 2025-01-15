@@ -1,55 +1,46 @@
 import { Button, Paper, Stack, TextField } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import ClearAllIcon from "@mui/icons-material/ClearAll";
-import { useAppDispatch, useAppSelector } from "../../../libs/hooks";
 import { ChangeEvent, memo, useState } from "react";
-import {
-  addTodo,
-  makeAlertHidden,
-  makeAlertVisible,
-} from "../../../repository/store/todo/slice/todo.slice";
 import classes from "./styles/styles.module.scss";
-import { logout } from "../../../repository/store/auth/slice/auth.slice";
+import { toast } from "react-toastify";
+import { logout } from "repository/store/auth/slice/auth.slice";
+import { useAppDispatch } from "libs/hooks";
+import { useCreateTodoMutation } from "repository/store/todo/api/todo.api";
+
+const defaultValues = {
+  title: "",
+};
 
 const TodosHeader = () => {
-  const [text, setText] = useState("");
-  const listTodo = useAppSelector((state) => state.todoReducer.list);
-  const currentTodo = listTodo.filter(
-    (todo: any) => todo.isDeleted === false && todo.isDone === false
-  );
-  const dispatch = useAppDispatch();
-
-  const hasDoubles = listTodo.some((el: any) => el.text === text.trim());
-
-  const handleAddTodo = () => {
-    if (currentTodo.length === 10) {
-      dispatch(makeAlertVisible());
-      setTimeout(() => {
-        dispatch(makeAlertHidden());
-      }, 3000);
-      return;
-    }
-    if (text !== "" && !hasDoubles) {
-      dispatch(addTodo(text));
-      setText("");
-    }
-  };
+  const [state, setState] = useState(defaultValues);
 
   const handleExit = () => {
     dispatch(logout());
   };
+  const dispatch = useAppDispatch();
 
-  const handleTodoText = (e: ChangeEvent<HTMLInputElement>) => {
-    setText(e.target.value);
+  const handleChangeStateValue = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setState((prev) => ({ ...prev, [name]: value }));
   };
 
-  const submitDeal = (e: any) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
-    handleAddTodo();
+    createTodo(state)
+      .unwrap()
+      .then((_res) => {
+        toast.success("Задача успешно создана");
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Ошибка создания новой задачи");
+      });
   };
+  const [createTodo, { isLoading }] = useCreateTodoMutation();
 
   return (
-    <form className={classes.form} onSubmit={submitDeal}>
+    <form className={classes.form} onSubmit={handleSubmit}>
       <Stack
         width={{ xs: "85%", sm: "500px", md: "600px", lg: "800px" }}
         mt={5}
@@ -79,20 +70,20 @@ const TodosHeader = () => {
             <Button
               variant="contained"
               startIcon={<AddIcon />}
-              onClick={handleAddTodo}
+              type="submit"
+              disabled={isLoading}
               sx={{
-                // width: window.innerWidth < 601 ? "204px" : "auto",
                 backgroundColor: "rgb(10%, 46%, 82%, 0.6)",
               }}
             >
               {window.innerWidth <= 600 ? "Добавить дело" : "Добавить"}
             </Button>
             <TextField
-              id="todoField"
+              name="title"
               label="Пополните список дел"
               variant="standard"
-              value={text}
-              onChange={handleTodoText}
+              value={state["title"]}
+              onChange={handleChangeStateValue}
               sx={{ alignItems: "center" }}
               InputLabelProps={{
                 style: { color: "rgb(224,224,224)" },

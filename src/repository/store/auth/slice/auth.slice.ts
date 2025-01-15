@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { JWT_TOKENS_KEYS } from "../../../../libs/constants/tokens";
+import { JWT_TOKENS_KEYS } from "libs/constants/tokens";
 
 const getDefaultAuthState = (): boolean => {
   const access_token = sessionStorage.getItem(JWT_TOKENS_KEYS.ACCESS_TOKEN);

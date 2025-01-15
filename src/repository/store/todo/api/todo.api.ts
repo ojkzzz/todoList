@@ -1,8 +1,8 @@
 import { createApi } from "@reduxjs/toolkit/dist/query/react";
-import { baseQueryWithReauth } from "../../helpers/api/baseQueryWithReauth";
-import { BASE_API_URL } from "../../../../libs/constants/http";
-import { SuccessResponse } from "../../../../libs/types/successResponse";
-import { Todo } from "../../../../models/todo";
+import { BASE_API_URL } from "libs/constants/http";
+import { SuccessResponse } from "libs/types/successResponse";
+import { Todo } from "models/todo";
+import { baseQueryWithReauth } from "repository/store/helpers/api/baseQueryWithReauth";
 
 const API_URL = `${BASE_API_URL}/tasks`;
 
@@ -31,6 +31,14 @@ export const todoApi = createApi({
       }),
       invalidatesTags: ["todoList"],
     }),
+    createTodo: builder.mutation<any, { title: string }>({
+      query: (body) => ({
+        url: API_URL,
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["todoList"],
+    }),
   }),
 });
 
@@ -38,4 +46,5 @@ export const {
   useLazyGetAllTodosQuery,
   useChangeStatusTodoMutation,
   useDeleteTodoMutation,
+  useCreateTodoMutation,
 } = todoApi;

@@ -1,16 +1,15 @@
 import { Button, Paper, Stack, TextField } from "@mui/material";
-import { FormEvent, useState } from "react";
-import { useLoginMutation } from "../../repository/store/auth/api/auth.api";
-import { JWT_TOKENS_KEYS } from "../../libs/constants/tokens";
-import { useAppDispatch } from "../../libs/hooks";
-import { login } from "../../repository/store/auth/slice/auth.slice";
+import { FormEvent } from "react";
+import { useLoginMutation } from "repository/store/auth/api/auth.api";
+import { JWT_TOKENS_KEYS } from "libs/constants/tokens";
+import { useAppDispatch } from "libs/hooks";
+import { login } from "repository/store/auth/slice/auth.slice";
 import { toast } from "react-toastify";
 
 const LoginPage = () => {
-  const [error, setError] = useState<boolean>(false);
   const dispatch = useAppDispatch();
 
-  const [trigerLogin, { isLoading }] = useLoginMutation();
+  const [trigerLogin, { isLoading, isError }] = useLoginMutation();
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -66,14 +65,14 @@ const LoginPage = () => {
           name="login"
           label="Логин"
           variant="standard"
-          error={error}
+          error={isError}
         />
         <TextField
           name="password"
           label="Пароль"
           variant="standard"
           type="password"
-          error={error}
+          error={isError}
         />
         <Button
           disabled={isLoading}

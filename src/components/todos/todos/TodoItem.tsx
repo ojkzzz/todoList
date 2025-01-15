@@ -41,11 +41,13 @@ const TodoItem: FC<Props> = ({
         {title}
       </Typography>
       <Stack direction="row">
-        <Tooltip title="Задача выполнена" placement="top">
-          <IconButton onClick={handleChangeStatus}>
-            <DoneIcon />
-          </IconButton>
-        </Tooltip>
+        {!done && (
+          <Tooltip title="Задача выполнена" placement="top">
+            <IconButton onClick={handleChangeStatus}>
+              <DoneIcon />
+            </IconButton>
+          </Tooltip>
+        )}
         <Tooltip title="Удалить задачу" placement="right-start">
           <IconButton onClick={handleDelete}>
             <RemoveCircleIcon />

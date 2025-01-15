@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from "react-router";
 import { ROUTER } from "./config/router";
-import { useAppSelector } from "../libs/hooks";
+import { useAppSelector } from "libs/hooks";
 import { ToastContainer } from "react-toastify";
 
 function App() {

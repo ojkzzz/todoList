@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { BASE_API_URL } from "../../../../libs/constants/http";
-import { SuccessResponse } from "../../../../libs/types/successResponse";
+import { BASE_API_URL } from "libs/constants/http";
+import { SuccessResponse } from "libs/types/successResponse";
 
 interface Tokens {
   access_token: string;

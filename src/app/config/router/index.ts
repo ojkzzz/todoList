@@ -1,4 +1,4 @@
-import { LoginPage, TodoPage } from "../../../pages";
+import { LoginPage, TodoPage } from "pages";
 
 export const ROUTER = {
   PUBLIC_ROUTES: [
